@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hyunkyu Lee-research</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <!-- Custom styles for this template -->
+    <link href="css/kyuTemplate.css" rel="stylesheet">
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top bs-docs-nav">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Hyunkyu Lee</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="pub.html">Publication</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Research <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="research.html">Frontiers</a></li>
+              </ul>
+            </li>
+            <li><a href="misc.html">Misc</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    
+    <div class="container">  
+
+      <div class="starter-template">
+        <h1>Forecasting cognitive benefit from game training</h1>
+      </div>
+
+      <style>
+      html, body {
+        font-family: "Helvetica Neue";
+        margin: 10px;
+        padding: 0px;
+        border: 0px;
+      }
+
+      .text {
+        font: 16px "Helvetica Neue";
+      }
+
+      .dot {
+        stroke: #000;
+      }
+
+      .axis path, .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+
+      .label {
+        fill: #777;
+        font: 18px "Helvetica Neue";
+      }
+
+
+      .year.label {
+        font: 500 196px "Helvetica Neue";
+        fill: #ddd;
+      }
+
+      .session.label {
+        font: 30px "Helvetica Neue";
+        fill: #ddd;
+      }
+
+      .overlay {
+        fill: none;
+        pointer-events: all;
+        cursor: ew-resize;
+      }
+
+      .legend rect {
+        fill:white;
+        opacity:0.8;
+      }
+
+      #wrap {
+         width:1300px;
+         margin:0 auto;
+      }
+      #left_col {
+         float:left;
+         width:700px;
+      }
+      #right_col {
+         float:right;
+         width:500px;
+      }
+
+      </style>
+      <h2>Relation between baseline ability and game performance</h2>
+      <h4>Mouseover the session to move forward and backwards through training.</h4>
+      <div id="wrap">
+          <div id="left_col">
+              <p id="chart"></p>
+          </div>
+          <div id="right_col">
+              <p id="chartCor"></p>
+          </div>
+      </div>
+      <p id="chart2"></p>
+      <h2>Relation between baseline ability and training success</h2>
+      <p id="chart3"></p>
+      <h2>Relation between game success and transfer success</h2>
+      <p id="chart4"></p>
+
+      <script src="http://d3js.org/d3.v2.js"></script>
+      <script src="d3.legend.js"></script>
+      <script>
+
+      // Various accessors that specify the four dimensions of data to visualize.
+      function x(d) { return d.gameScore; }
+      function y(d) { return d.baselineEF; }
+      function radius(d) { return d.dotSize; }
+      function name(d) {return d.name}
+      function color(d) { return d.group; }
+      function key(d) { return d.name; }
+
+      // Chart dimensions.
+      var margin = {top: 19.5, right: 24.5, bottom: 60, left: 50},
+          width = 700 - margin.right,
+          widthCor = 500 - margin.right,
+          height = 450 - margin.top - margin.bottom;
+
+
+      // Various scales. These domains make assumptions of data, naturally.
+      var xScale = d3.scale.linear().domain([-5000, 7000]).range([0, width]),
+          xCorScale = d3.scale.linear().domain([0, 15]).range([0, widthCor]),
+          yScale = d3.scale.linear().domain([-15, 15]).range([height, 0]),
+          yCorScale = d3.scale.linear().domain([0, 1]).range([height, 0]),
+          radiusScale = d3.scale.sqrt().domain([0, 5e8]).range([0, 40]),
+          colorScale = d3.scale.category10();
+      // The x & y axes.
+      var xAxis = d3.svg.axis().orient("bottom").scale(xScale).ticks(12, d3.format(",d")),
+          yAxis = d3.svg.axis().scale(yScale).orient("left"),
+          xCorAxis = d3.svg.axis().orient("bottom").scale(xCorScale).ticks(12, d3.format(",d")),
+          yCorAxis = d3.svg.axis().scale(yCorScale).orient("left");
+
+      // Create the SVG container and set the origin.
+      var svg = d3.select("#chart").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      var svg_c = d3.select("#chartCor").append("svg")
+          .attr("width", widthCor + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      // Create second SVG container and set the origin.
+      var svg2 = d3.select("#chart2").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      var svg3 = d3.select("#chart3").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      // Create second SVG container and set the origin.
+      var svg4 = d3.select("#chart4").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      // Add the x-axis.
+      svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+
+      svg_c.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xCorAxis);
+
+      svg2.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+      svg3.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+
+      svg4.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+
+      // Add the y-axis.
+      svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+
+      svg_c.append("g")
+          .attr("class", "y axis")
+          .call(yCorAxis);
+
+      svg2.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+
+      svg3.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+
+      svg4.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+
+      // Add an x-axis label.
+      svg.append("text")
+          .attr("class", "x label")
+          .attr("text-anchor", "middle")
+          .attr("x", width/2)
+          .attr("y", height + 50)
+          .text("Space Fortress game performance");
+
+      svg_c.append("text")
+          .attr("class", "x label")
+          .attr("text-anchor", "middle")
+          .attr("x", widthCor/2)
+          .attr("y", height + 50)
+          .text("Training Session");
+
+      svg2.append("text")
+          .attr("class", "x label")
+          .attr("text-anchor", "middle")
+          .attr("x", width/2)
+          .attr("y", height +50)
+          .text("Space Fortress game performance");
+
+      svg3.append("text")
+          .attr("class", "x label")
+          .attr("text-anchor", "middle")
+          .attr("x", width/2)
+          .attr("y", height +50)
+          .text("Success of game training (last score - initial score)");
+
+      svg4.append("text")
+          .attr("class", "x label")
+          .attr("text-anchor", "middle")
+          .attr("x", width/2)
+          .attr("y", height +50)
+          .text("Success of game training (last score - initial score)");
+
+      // Add a y-axis label.
+      svg.append("text")
+          .attr("class", "y label")
+          .attr("text-anchor", "end")
+          .attr("y", -50)
+          .attr("dy", ".75em")
+          .attr("transform", "rotate(-90)")
+          .text("Baseline Executive Function (Composite Score)");
+
+      svg_c.append("text")
+          .attr("class", "y label")
+          .attr("text-anchor", "end")
+          .attr("y", -50)
+          .attr("dy", ".75em")
+          .attr("transform", "rotate(-90)")
+          .text("Partial Correlation of game and baseline EF (r)");
+
+      svg2.append("text")
+          .attr("class", "y label")
+          .attr("text-anchor", "end")
+          .attr("y", -50)
+          .attr("dy", ".75em")
+          .attr("transform", "rotate(-90)")
+          .text("Baseline Working Memory (Composite Score)");
+
+      svg3.append("text")
+          .attr("class", "y label")
+          .attr("text-anchor", "end")
+          .attr("y", -50)
+          .attr("dy", ".75em")
+          .attr("transform", "rotate(-90)")
+          .text("Baseline Executive Function (Composite Score)");
+
+      svg4.append("text")
+          .attr("class", "y label")
+          .attr("text-anchor", "end")
+          .attr("y", -50)
+          .attr("dy", ".75em")
+          .attr("transform", "rotate(-90)")
+          .text("Transfer of Executive Function (Composite Score)");
+
+      svg.append("text")
+          .attr("class", "session label")
+          .attr("text-anchor", "start")
+          .attr("y", height - 180)
+          .attr("x", width-196)
+          .text("session");
+
+      // Add the year label; the value is set on transition.
+      var label1 = svg.append("text")
+          .attr("class", "year label")
+          .attr("text-anchor", "end")
+          .attr("y", height - 24)
+          .attr("x", width)
+          .text(1);
+
+      var label2 = svg2.append("text")
+          .attr("class", "year label")
+          .attr("text-anchor", "end")
+          .attr("y", height - 24)
+          .attr("x", width)
+          .text(1);
+
+      // Load the data.
+      d3.json("sf1.json", function(sfresults) {
+
+        // A bisector since many sfresult's data is sparsely-defined.
+        var bisect = d3.bisector(function(d) { return d[0]; });
+
+        // Add a dot per sfresult. Initialize the data at 1, and set the colors.
+        var dot = svg.append("g")
+            .attr("class", "dots")
+          .selectAll(".dot")
+            .data(interpolateData(1))
+          .enter().append("circle")
+            .attr("class", "dot")
+            .attr("data-legend",function(d) { return color(d);})
+            .style("fill", function(d) { return colorScale(color(d)); })
+            .call(position)
+            .sort(order);
+
+        var dotC = svg_c.append("g")
+            .attr("class", "dots")
+          .selectAll(".dot")
+            .data(interpolateData(1))
+          .enter().append("circle")
+            .attr("class", "dot")
+            .attr("data-legend",function(d) { return color(d);})
+            .style("fill", function(d) { return colorScale(color(d)); })
+            .call(positionC)
+            .sort(order); 
+
+        var dot2 = svg2.append("g")
+            .attr("class", "dots")
+          .selectAll(".dot")
+            .data(interpolateData(1))
+          .enter().append("circle")
+            .attr("class", "dot")
+            .style("fill", function(d) { return colorScale(color(d)); })
+            .call(position2)
+            .sort(order);
+
+        var dot3 = svg3.append("g")
+            .attr("class", "dots")
+          .selectAll(".dot")
+            .data(interpolateData(1))
+          .enter().append("circle")
+            .attr("class", "dot")
+            .style("fill", function(d) { return colorScale(color(d)); })
+            .call(position3)
+            .sort(order);
+
+        var dot4 = svg4.append("g")
+            .attr("class", "dots")
+          .selectAll(".dot")
+            .data(interpolateData(1))
+          .enter().append("circle")
+            .attr("class", "dot")
+            .style("fill", function(d) { return colorScale(color(d)); })
+            .call(position4)
+            .sort(order);
+
+        // Add a title.
+        dot.append("title")
+            .text(function(d) { return name(d); });
+
+        // Add line
+          // testing
+        var EF_data = [3, 6, 2, 7, 5, 2, 1, 3, 8, 9, 2, 5, 7];
+
+        var line = d3.svg.line()
+          .interpolate("basis")
+          .x(function(d,i) { return x(i); })
+          .y(function(d) { return y(d); })
+
+        svg_c.selectAll("line")
+          .data(EF_data)
+        .enter().append("path")
+          .attr("class", "line")
+       
+
+        // Add a legend
+        legend = svg.append("g")
+        .attr("class","legend")
+        .attr("transform","translate(50,30)")
+        .call(d3.legend)
+
+        // Add an overlay for the year label.
+        var box = label1.node().getBBox();
+
+        var overlay = svg.append("rect")
+              .attr("class", "overlay")
+              .attr("x", box.x)
+              .attr("y", box.y)
+              .attr("width", box.width)
+              .attr("height", box.height)
+              .on("mouseover", enableInteraction);
+
+        var overlay2 = svg2.append("rect")
+              .attr("class", "overlay")
+              .attr("x", box.x)
+              .attr("y", box.y)
+              .attr("width", box.width)
+              .attr("height", box.height)
+              .on("mouseover", enableInteraction);
+
+
+        // Start a transition that interpolates the data based on year.
+        svg.transition()
+            .duration(20000)
+            .ease("linear")
+            .tween("year", tweenYear)
+            .each("end", enableInteraction);
+
+        svg2.transition()
+            .duration(20000)
+            .ease("linear")
+            .tween("year", tweenYear)
+            .each("end", enableInteraction);
+
+        // Positions the dots based on data.
+        function position(dot) {
+          dot .attr("cx", function(d) { return xScale(x(d)); })
+              .attr("cy", function(d) { return yScale(y(d)); })
+              .attr("r", function(d) { return radius(d)});
+        }
+        function position2(dot2) {
+          dot2 .attr("cx", function(d) { return xScale(x(d)); })
+              .attr("cy", function(d) { return yScale(d.baselineWM); })
+              .attr("r", function(d) { return radius(d)});
+        }
+        function position3(dot3) {
+          dot3 .attr("cx", function(d) { console.log(d);return xScale(d.total_improve); })
+              .attr("cy", function(d) { return yScale(d.baselineEF); })
+              .attr("r", function(d) { return radius(d)});
+        }
+        function position4(dot4) {
+          dot4 .attr("cx", function(d) { return xScale(d.total_improve); })
+              .attr("cy", function(d) { return yScale(d.EFimprove); })
+              .attr("r", function(d) { return radius(d)});
+        }
+        function positionC(dotC) {
+          dotC .attr("cx", function(d) { return xCorScale(d.session); })
+              .attr("cy", function(d) { return yCorScale(d.EFCor); })
+              .attr("r", function(d) { return radius(d)});
+        }
+        // Defines a sort order so that the smallest dots are drawn on top.
+        function order(a, b) {
+          return radius(b) - radius(a);
+        }
+
+        // After the transition finishes, you can mouseover to change the year.
+        function enableInteraction() {
+          var yearScale = d3.scale.linear()
+              .domain([1, 15])
+              .range([box.x + 10, box.x + box.width - 10])
+              .clamp(true);
+
+          // Cancel the current transition, if any.
+          svg.transition().duration(0);
+          svg2.transition().duration(0);
+
+
+          overlay
+              .on("mouseover", mouseover)
+              .on("mouseout", mouseout)
+              .on("mousemove", mousemove)
+              .on("touchmove", mousemove);
+
+          overlay2
+              .on("mouseover", mouseover)
+              .on("mouseout", mouseout)
+              .on("mousemove", mousemove)
+              .on("touchmove", mousemove);
+
+          function mouseover() {
+            label1.classed("active", true);
+          }
+
+          function mouseout() {
+            label1.classed("active", false);
+          }
+
+          function mousemove() {
+            displayYear(yearScale.invert(d3.mouse(this)[0]));
+          }
+        }
+
+        // Tweens the entire chart by first tweening the year, and then the data.
+        // For the interpolated data, the dots and label are redrawn.
+        function tweenYear() {
+          var year = d3.interpolateNumber(1, 15);
+          return function(t) { displayYear(year(t)); };
+        }
+
+        // Updates the display to show the specified year.
+        function displayYear(year) {
+          dot.data(interpolateData(year), key).call(position).sort(order);
+          label1.text(Math.round(year));
+          dot2.data(interpolateData(year), key).call(position2).sort(order);
+          label2.text(Math.round(year));
+          dotC.data(interpolateData(year), key).call(positionC).sort(order);
+        }
+
+        // Interpolates the dataset for the given (fractional) year.
+        function interpolateData(year) {
+          return sfresults.map(function(d) {
+            return {
+              name: d.name,
+              group: d.group,
+              gameScore: interpolateValues(d.gameScore, year),
+              dotSize: d.dotSize,
+              baselineEF: d.baselineEF,
+              baselineWM: d.baselineWM,
+              session: year,
+              EFCor: interpolateValues(d.EF_correlation, year),
+              WMCor: interpolateValues(d.WM_correlation, year),
+              EFimprove: d.reasoning_improve,
+              WMimprove: d.attMemory_improve,
+              total_improve: d.total_improve,
+              total_improve_early: d.total_improve_early,
+              total_improve_middle: d.total_improve_middle_only,
+              total_improve_late: d.total_improve_late_only
+            };
+          });
+        }
+        // Finds (and possibly interpolates) the value for the specified year.
+        function interpolateValues(values, year) {
+          var i = bisect.left(values, year, 0, values.length - 1),
+              a = values[i];
+          if (i > 0) {
+            var b = values[i - 1],
+                t = (year - a[0]) / (b[0] - a[0]);
+            return a[1] * (1 - t) + b[1] * t;
+          }
+          return a[1];
+        }
+      });
+
+    </script>
+
+    </div>  
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
