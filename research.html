@@ -31,7 +31,7 @@
           <ul class="nav navbar-nav">
             <li><a href="index.html">Home</a></li>
             <li><a href="pub.html">Publication</a></li>
-            <li class="dropdown">
+            <li class="dropdown bs-docs-nav">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Research <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="research.html">Frontiers</a></li>
@@ -99,14 +99,26 @@
       }
 
       #wrap {
-         width:1300px;
+         width:1100px;
          margin:0 auto;
       }
       #left_col {
          float:left;
-         width:700px;
+         width:600px;
       }
       #right_col {
+         float:right;
+         width:450px;
+      }
+      #wrap2 {
+         width:1100px;
+         margin:0 auto;
+      }
+      #left_col2 {
+         float:left;
+         width:500px;
+      }
+      #right_col2 {
          float:right;
          width:500px;
       }
@@ -122,9 +134,18 @@
               <p id="chartCor"></p>
           </div>
       </div>
-      <p id="chart2"></p>
+      <div id="wrap">
+          <div id="left_col">
+              <p id="chart2"></p>
+          </div>
+          <div id="right_col">
+              <p id="chartCor2"></p>
+          </div>
+      </div>
       <h2>Relation between baseline ability and training success</h2>
+     
       <p id="chart3"></p>
+     
       <h2>Relation between game success and transfer success</h2>
       <p id="chart4"></p>
 
@@ -142,13 +163,15 @@
 
       // Chart dimensions.
       var margin = {top: 19.5, right: 24.5, bottom: 60, left: 50},
-          width = 700 - margin.right,
-          widthCor = 500 - margin.right,
+          width = 600 - margin.right,
+          widthImprove = 500 - margin.right,
+          widthCor = 450 - margin.right,
           height = 450 - margin.top - margin.bottom;
 
 
       // Various scales. These domains make assumptions of data, naturally.
-      var xScale = d3.scale.linear().domain([-5000, 7000]).range([0, width]),
+      var xScale = d3.scale.linear().domain([-5000, 8000]).range([0, width]),
+          ximproveScale = d3.scale.linear().domain([0, 9000]).range([0, widthImprove]),
           xCorScale = d3.scale.linear().domain([0, 15]).range([0, widthCor]),
           yScale = d3.scale.linear().domain([-15, 15]).range([height, 0]),
           yCorScale = d3.scale.linear().domain([0, 1]).range([height, 0]),
@@ -156,6 +179,7 @@
           colorScale = d3.scale.category10();
       // The x & y axes.
       var xAxis = d3.svg.axis().orient("bottom").scale(xScale).ticks(12, d3.format(",d")),
+          ximproveAxis = d3.svg.axis().orient("bottom").scale(ximproveScale).ticks(12, d3.format(",d")),
           yAxis = d3.svg.axis().scale(yScale).orient("left"),
           xCorAxis = d3.svg.axis().orient("bottom").scale(xCorScale).ticks(12, d3.format(",d")),
           yCorAxis = d3.svg.axis().scale(yCorScale).orient("left");
@@ -180,15 +204,21 @@
         .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+      var svg_c2 = d3.select("#chartCor").append("svg")
+          .attr("width", widthCor + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
       var svg3 = d3.select("#chart3").append("svg")
-          .attr("width", width + margin.left + margin.right)
+          .attr("width", widthImprove + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
         .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       // Create second SVG container and set the origin.
       var svg4 = d3.select("#chart4").append("svg")
-          .attr("width", width + margin.left + margin.right)
+          .attr("width", widthImprove + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
         .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -208,15 +238,21 @@
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height + ")")
           .call(xAxis);
+
+      svg_c2.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xCorAxis);
+
       svg3.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height + ")")
-          .call(xAxis);
+          .call(ximproveAxis);
 
       svg4.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height + ")")
-          .call(xAxis);
+          .call(ximproveAxis);
 
       // Add the y-axis.
       svg.append("g")
@@ -231,6 +267,10 @@
           .attr("class", "y axis")
           .call(yAxis);
 
+      svg_c2.append("g")
+          .attr("class", "y axis")
+          .call(yCorAxis);
+      
       svg3.append("g")
           .attr("class", "y axis")
           .call(yAxis);
@@ -261,17 +301,24 @@
           .attr("y", height +50)
           .text("Space Fortress game performance");
 
+      svg_c2.append("text")
+          .attr("class", "x label")
+          .attr("text-anchor", "middle")
+          .attr("x", widthCor/2)
+          .attr("y", height + 50)
+          .text("Training Session");
+    
       svg3.append("text")
           .attr("class", "x label")
           .attr("text-anchor", "middle")
-          .attr("x", width/2)
+          .attr("x", widthImprove/2)
           .attr("y", height +50)
           .text("Success of game training (last score - initial score)");
 
       svg4.append("text")
           .attr("class", "x label")
           .attr("text-anchor", "middle")
-          .attr("x", width/2)
+          .attr("x", widthImprove/2)
           .attr("y", height +50)
           .text("Success of game training (last score - initial score)");
 
@@ -291,6 +338,14 @@
           .attr("dy", ".75em")
           .attr("transform", "rotate(-90)")
           .text("Partial Correlation of game and baseline EF (r)");
+
+      svg_c2.append("text")
+          .attr("class", "y label")
+          .attr("text-anchor", "end")
+          .attr("y", -50)
+          .attr("dy", ".75em")
+          .attr("transform", "rotate(-90)")
+          .text("Partial Correlation of game and baseline WM (r)");
 
       svg2.append("text")
           .attr("class", "y label")
@@ -376,6 +431,17 @@
             .style("fill", function(d) { return colorScale(color(d)); })
             .call(position2)
             .sort(order);
+
+        var dotC2 = svg_c2.append("g")
+            .attr("class", "dots")
+          .selectAll(".dot")
+            .data(interpolateData(1))
+          .enter().append("circle")
+            .attr("class", "dot")
+            .attr("data-legend",function(d) { return color(d);})
+            .style("fill", function(d) { return colorScale(color(d)); })
+            .call(positionC2)
+            .sort(order); 
 
         var dot3 = svg3.append("g")
             .attr("class", "dots")
@@ -467,18 +533,23 @@
               .attr("r", function(d) { return radius(d)});
         }
         function position3(dot3) {
-          dot3 .attr("cx", function(d) { console.log(d);return xScale(d.total_improve); })
+          dot3 .attr("cx", function(d) { console.log(d);return ximproveScale(d.total_improve); })
               .attr("cy", function(d) { return yScale(d.baselineEF); })
               .attr("r", function(d) { return radius(d)});
         }
         function position4(dot4) {
-          dot4 .attr("cx", function(d) { return xScale(d.total_improve); })
+          dot4 .attr("cx", function(d) { return ximproveScale(d.total_improve); })
               .attr("cy", function(d) { return yScale(d.EFimprove); })
               .attr("r", function(d) { return radius(d)});
         }
         function positionC(dotC) {
           dotC .attr("cx", function(d) { return xCorScale(d.session); })
               .attr("cy", function(d) { return yCorScale(d.EFCor); })
+              .attr("r", function(d) { return radius(d)});
+        }
+        function positionC2(dotC) {
+          dotC .attr("cx", function(d) { return xCorScale(d.session); })
+              .attr("cy", function(d) { return yCorScale(d.WMCor); })
               .attr("r", function(d) { return radius(d)});
         }
         // Defines a sort order so that the smallest dots are drawn on top.
@@ -537,6 +608,7 @@
           dot2.data(interpolateData(year), key).call(position2).sort(order);
           label2.text(Math.round(year));
           dotC.data(interpolateData(year), key).call(positionC).sort(order);
+          dotC2.data(interpolateData(year), key).call(positionC2).sort(order);
         }
 
         // Interpolates the dataset for the given (fractional) year.
