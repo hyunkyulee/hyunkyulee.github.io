@@ -125,6 +125,26 @@
          float:right;
          width:500px;
       }
+      .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+      }
+      .line2 {
+        fill: none;
+        stroke: orange;
+        stroke-width: 1.5px;
+      }
+      .reg_fet {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+      }
+      .reg_hvt {
+        fill: none;
+        stroke: orange;
+        stroke-width: 1.5px;
+      }
 
       </style>
       <h2>Relation between baseline ability and game performance</h2>
@@ -398,7 +418,7 @@
           .attr("y", -50)
           .attr("dy", ".75em")
           .attr("transform", "rotate(-90)")
-          .text("Correlation game score and baseline EF(r)");
+          .text("Correlation game score and baseline EF (r)");
 
       svg_c2.append("text")
           .attr("class", "y label")
@@ -406,7 +426,7 @@
           .attr("y", -50)
           .attr("dy", ".75em")
           .attr("transform", "rotate(-90)")
-          .text("Correlation game score and baseline WM(r)");
+          .text("Correlation game score and baseline WM (r)");
 
       svg2.append("text")
           .attr("class", "y label")
@@ -475,6 +495,128 @@
 
         // A bisector since many sfresult's data is sparsely-defined.
         var bisect = d3.bisector(function(d) { return d[0]; });
+
+        // Add line for correlation graphs
+        var linedata = twoGroupData().map(function(d) {
+            return d.EFCor;
+          });
+        var linedata_data = splitArray(linedata);
+
+        var linedata2 = twoGroupData().map(function(d) {
+            return d.WMCor;
+          });
+        var linedata_data2 = splitArray(linedata2);
+
+        function splitArray(candid) {
+            var oddOnes = [],
+                evenOnes = [];
+            for(var i=0; i<candid.length; i++)
+                (i % 2 == 0 ? evenOnes : oddOnes).push(candid[i]);
+            return [evenOnes, oddOnes];
+        }
+        
+        var line = d3.svg.line()
+          // assign the X function to plot our line as we wish
+          .x(function(d,i) { 
+            return xCorScale(i+1); 
+          })
+          .y(function(d) { 
+            return yCorScale(d); 
+          })
+        
+        svg_c.append("path")
+          .datum(linedata_data[0])
+          .attr("class", "line")
+          .attr("d", line);
+
+        svg_c.append("path")
+          .datum(linedata_data[1])
+          .attr("class", "line2")
+          .attr("d", line);
+
+        svg_c2.append("path")
+          .datum(linedata_data2[0])
+          .attr("class", "line")
+          .attr("d", line);
+
+        svg_c2.append("path")
+          .datum(linedata_data2[1])
+          .attr("class", "line2")
+          .attr("d", line);
+
+        // Add regression line
+        var fet_data = interpolateData(1).splice(0,25);
+        var hvt_data = interpolateData(1).splice(25,50);
+        
+        // svg 3 EF and game
+        var lin_fet1 = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve, d.baselineEF];
+          })).line();
+
+        var lin_hvt1 = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve, d.baselineEF];
+          })).line();
+        
+        var lindata_fet1 = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet1(+x)
+            };
+          });
+        var lindata_hvt1 = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt1(+x)
+            };
+          });
+        // svg 3_1 WM and game
+        var lin_fet2 = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve, d.baselineWM];
+          })).line();
+
+        var lin_hvt2 = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve, d.baselineWM];
+          })).line();
+        
+        var lindata_fet2 = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet2(+x)
+            };
+          });
+        var lindata_hvt2 = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt2(+x)
+            };
+          });
+
+        var regline = d3.svg.line()
+          // assign the X function to plot our line as we wish
+          .x(function(d) { 
+            return ximproveScale(d.x); 
+          })
+          .y(function(d) { 
+            return yScale(d.y); 
+          })
+
+        svg3.append("path")
+          .datum(lindata_fet1)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg3.append("path")
+          .datum(lindata_hvt1)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        svg3_1.append("path")
+          .datum(lindata_fet2)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg3_1.append("path")
+          .datum(lindata_hvt2)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
 
         // Add a dot per sfresult. Initialize the data at 1, and set the colors.
         var dot = svg.append("g")
@@ -616,7 +758,7 @@
       .datum(lindata)
       .attr("class", "reg")
       .attr("d", line);
-
+*/
       // correlation line data
       var gameSuccssAll_data = interpolateData(1).map(function(d) {
             return d.total_improve;
@@ -642,7 +784,7 @@
       var improveWM = interpolateData(1).map(function(d) {
             return d.WMimprove;
           });
-*/
+
         // Add a legend
         legend = svg.append("g")
         .attr("class","legend")
