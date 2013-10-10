@@ -145,11 +145,66 @@
         stroke: orange;
         stroke-width: 1.5px;
       }
+    
+    .myButton {
+        
+        -moz-box-shadow:inset 0px 1px 0px 0px #efdcfb;
+        -webkit-box-shadow:inset 0px 1px 0px 0px #efdcfb;
+        box-shadow:inset 0px 1px 0px 0px #efdcfb;
+        
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #dfbdfa), color-stop(1, #bc80ea));
+        background:-moz-linear-gradient(top, #dfbdfa 5%, #bc80ea 100%);
+        background:-webkit-linear-gradient(top, #dfbdfa 5%, #bc80ea 100%);
+        background:-o-linear-gradient(top, #dfbdfa 5%, #bc80ea 100%);
+        background:-ms-linear-gradient(top, #dfbdfa 5%, #bc80ea 100%);
+        background:linear-gradient(to bottom, #dfbdfa 5%, #bc80ea 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfbdfa', endColorstr='#bc80ea',GradientType=0);
+        
+        background-color:#dfbdfa;
+        
+        -moz-border-radius:6px;
+        -webkit-border-radius:6px;
+        border-radius:6px;
+        
+        border:1px solid #c584f3;
+        
+        display:inline-block;
+        color:#ffffff;
+        font-family:arial;
+        font-size:15px;
+        font-weight:bold;
+        padding:6px 24px;
+        text-decoration:none;
+        
+        text-shadow:0px 1px 0px #9752cc;
+        
+    }
+    .myButton:hover {
+        
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #bc80ea), color-stop(1, #dfbdfa));
+        background:-moz-linear-gradient(top, #bc80ea 5%, #dfbdfa 100%);
+        background:-webkit-linear-gradient(top, #bc80ea 5%, #dfbdfa 100%);
+        background:-o-linear-gradient(top, #bc80ea 5%, #dfbdfa 100%);
+        background:-ms-linear-gradient(top, #bc80ea 5%, #dfbdfa 100%);
+        background:linear-gradient(to bottom, #bc80ea 5%, #dfbdfa 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#bc80ea', endColorstr='#dfbdfa',GradientType=0);
+        
+        background-color:#bc80ea;
+    }
+    .myButton:active {
+        position:relative;
+        top:1px;
+    }
+
+    }
+
+
 
       </style>
       <h2>Relation between baseline ability and game performance</h2>
-      <h4>Mouseover the session to move forward and backwards through training.</h4>
-      <div id="wrap">
+      <aside style="color:#848484;font-size:23px;">Partial correlation between baseline cognitive abilities and game performance while controlling gender</aside>
+      <aside style="color:#848484;font-size:18px;">Mouseover the session to move forward and backwards through training.</aside>
+      <div class='chart'id="wrap">
           <div id="left_col">
               <p id="chart"></p>
           </div>
@@ -165,7 +220,16 @@
               <p id="chartCor2"></p>
           </div>
       </div>
-      <h2>Relation between baseline ability and training success</h2>
+    <h2>Relation between baseline ability and training success</h2>
+      <aside style="color:#848484;font-size:23px;">Partial correlation between baseline cognitive abilities and game improvement while controlling gender and baseline game performance</aside>
+      <aside style="color:#848484;font-size:18px;padding-top:10px;">Toggle the training phase by clicking on the button.</aside>
+      <div style="padding-top:6px;"> 
+        <button class ="myButton" id = "update5">ALL</button>
+        <button class ="myButton" id = "update6">Early</button>
+        <button class ="myButton" id = "update7">Middle</button>
+        <button class ="myButton" id = "update8">Late</button>
+      </div>
+     
      <div id="wrap2">
           <div id="left_col2">
               <p id="chart3"></p>
@@ -176,6 +240,14 @@
       </div>
      
       <h2>Relation between game success and transfer success</h2>
+      <aside style="color:#848484;font-size:23px;">Partial correlation between transfer of cognitive function and game improvement while controlling gender and baseline game performance</aside>
+      <aside style="color:#848484;font-size:18px;padding-top:10px;">Toggle training phase by clicking on the button.</aside>
+      <div style="padding-top:6px;">
+        <button class ="myButton" id = "update1">ALL</button>
+        <button class ="myButton" id = "update2">Early</button>
+        <button class ="myButton" id = "update3">Middle</button>
+        <button class ="myButton" id = "update4">Late</button>
+      </div>
       <div id="wrap2">
           <div id="left_col2">
               <p id="chart4"></p>
@@ -208,7 +280,7 @@
 
       // Various scales. These domains make assumptions of data, naturally.
       var xScale = d3.scale.linear().domain([-5000, 8000]).range([0, width]),
-          ximproveScale = d3.scale.linear().domain([0, 9000]).range([0, widthImprove]),
+          ximproveScale = d3.scale.linear().domain([-4000, 4000]).range([0, widthImprove]),
           xCorScale = d3.scale.linear().domain([0, 15]).range([0, widthCor]),
           yScale = d3.scale.linear().domain([-15, 15]).range([height, 0]),
           yCorScale = d3.scale.linear().domain([0, 1]).range([height, 0]),
@@ -380,28 +452,28 @@
           .attr("text-anchor", "middle")
           .attr("x", widthImprove/2)
           .attr("y", height +50)
-          .text("Success of game training (last score - initial score)"); 
+          .text("Success of game training "); 
 
       svg3_1.append("text")
           .attr("class", "x label")
           .attr("text-anchor", "middle")
           .attr("x", widthImprove/2)
           .attr("y", height +50)
-          .text("Success of game training (last score - initial score)");
+          .text("Success of game training ");
 
       svg4.append("text")
           .attr("class", "x label")
           .attr("text-anchor", "middle")
           .attr("x", widthImprove/2)
           .attr("y", height +50)
-          .text("Success of game training (last score - initial score)");
+          .text("Success of game training ");
 
       svg4_1.append("text")
           .attr("class", "x label")
           .attr("text-anchor", "middle")
           .attr("x", widthImprove/2)
           .attr("y", height +50)
-          .text("Success of game training (last score - initial score)");
+          .text("Success of game training ");
 
       // Add a y-axis label.
       svg.append("text")
@@ -491,12 +563,289 @@
           .text(1);
 
       // Load the data.
-      d3.json("sf1.json", function(sfresults) {
+      d3.json("sfdata.json", function(sfresults) {
 
         // A bisector since many sfresult's data is sparsely-defined.
         var bisect = d3.bisector(function(d) { return d[0]; });
 
-        // Add line for correlation graphs
+        // Add button functions
+        // All 
+        d3.select("#update1")
+        .on("click", function(d,i) {
+
+        svg4.selectAll("path").data(lindata_fet4).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1).exit().remove();
+        svg4.selectAll("path").data(lindata_fet4_early).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1_early).exit().remove();
+        svg4.selectAll("path").data(lindata_fet4_middle).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1_middle).exit().remove();
+        svg4.selectAll("path").data(lindata_fet4_late).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1_late).exit().remove();
+           
+        svg4.append("path")
+          .datum(lindata_fet4)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg4.append("path")
+          .datum(lindata_hvt4)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        svg4_1.append("path")
+          .datum(lindata_fet4_1)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg4_1.append("path")
+          .datum(lindata_hvt4_1)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+          dot4.data(interpolateData(1), key).call(position4).sort(order);
+          dot4_1.data(interpolateData(1), key).call(position4_1).sort(order);
+        }) 
+        // early
+        d3.select("#update2")
+        .on("click", function(d,i) {
+
+        svg4.selectAll("path").data(lindata_fet4).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1).exit().remove();
+        svg4.selectAll("path").data(lindata_fet4_early).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1_early).exit().remove();
+        svg4.selectAll("path").data(lindata_fet4_middle).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1_middle).exit().remove();
+        svg4.selectAll("path").data(lindata_fet4_late).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1_late).exit().remove();
+           
+        svg4.append("path")
+          .datum(lindata_fet4_early)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg4.append("path")
+          .datum(lindata_hvt4_early)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        svg4_1.append("path")
+          .datum(lindata_fet4_1_early)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg4_1.append("path")
+          .datum(lindata_hvt4_1_early)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        dot4.data(interpolateData(1), key).call(position4_early).sort(order);
+        dot4_1.data(interpolateData(1), key).call(position4_1_early).sort(order);
+        })
+        // middle
+        d3.select("#update3")
+        .on("click", function(d,i) {
+            
+        svg4.selectAll("path").data(lindata_fet4).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1).exit().remove();
+        svg4.selectAll("path").data(lindata_fet4_early).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1_early).exit().remove();
+        svg4.selectAll("path").data(lindata_fet4_middle).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1_middle).exit().remove();
+        svg4.selectAll("path").data(lindata_fet4_late).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1_late).exit().remove();
+           
+        svg4.append("path")
+          .datum(lindata_fet4_middle)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg4.append("path")
+          .datum(lindata_hvt4_middle)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        svg4_1.append("path")
+          .datum(lindata_fet4_1_middle)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg4_1.append("path")
+          .datum(lindata_hvt4_1_middle)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        dot4.data(interpolateData(1), key).call(position4_middle).sort(order);
+        dot4_1.data(interpolateData(1), key).call(position4_1_middle).sort(order);
+
+        })
+        // late
+        d3.select("#update4")
+        .on("click", function(d,i) {
+            dot4.data(interpolateData(1), key).call(position4_late).sort(order);
+            dot4_1.data(interpolateData(1), key).call(position4_1_late).sort(order);
+
+        svg4.selectAll("path").data(lindata_fet4).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1).exit().remove();
+        svg4.selectAll("path").data(lindata_fet4_early).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1_early).exit().remove();
+        svg4.selectAll("path").data(lindata_fet4_middle).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1_middle).exit().remove();
+        svg4.selectAll("path").data(lindata_fet4_late).exit().remove();
+        svg4_1.selectAll("path").data(lindata_fet4_1_late).exit().remove();
+           
+        svg4.append("path")
+          .datum(lindata_fet4_late)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg4.append("path")
+          .datum(lindata_hvt4_late)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        svg4_1.append("path")
+          .datum(lindata_fet4_1_late)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg4_1.append("path")
+          .datum(lindata_hvt4_1_late)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+        })
+      // All 
+        d3.select("#update5")
+        .on("click", function(d,i) {
+
+        svg3.selectAll("path").data(lindata_fet3).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1).exit().remove();
+        svg3.selectAll("path").data(lindata_fet3_early).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1_early).exit().remove();
+        svg3.selectAll("path").data(lindata_fet3_middle).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1_middle).exit().remove();
+        svg3.selectAll("path").data(lindata_fet3_late).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1_late).exit().remove();
+           
+        svg3.append("path")
+          .datum(lindata_fet3)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg3.append("path")
+          .datum(lindata_hvt3)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        svg3_1.append("path")
+          .datum(lindata_fet3_1)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg3_1.append("path")
+          .datum(lindata_hvt3_1)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        dot3.data(interpolateData(1), key).call(position3).sort(order);
+        dot3_1.data(interpolateData(1), key).call(position3_1).sort(order);
+        }) 
+        // early
+        d3.select("#update6")
+        .on("click", function(d,i) {
+            
+        svg3.selectAll("path").data(lindata_fet3).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1).exit().remove();
+        svg3.selectAll("path").data(lindata_fet3_early).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1_early).exit().remove();
+        svg3.selectAll("path").data(lindata_fet3_middle).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1_middle).exit().remove();
+        svg3.selectAll("path").data(lindata_fet3_late).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1_late).exit().remove();
+           
+        svg3.append("path")
+          .datum(lindata_fet3_early)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg3.append("path")
+          .datum(lindata_hvt3_early)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        svg3_1.append("path")
+          .datum(lindata_fet3_1_early)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg3_1.append("path")
+          .datum(lindata_hvt3_1_early)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        dot3.data(interpolateData(1), key).call(position3_early).sort(order);
+        dot3_1.data(interpolateData(1), key).call(position3_1_early).sort(order);
+
+        })
+        // middle
+        d3.select("#update7")
+        .on("click", function(d,i) {
+            dot3.data(interpolateData(1), key).call(position3_middle).sort(order);
+            dot3_1.data(interpolateData(1), key).call(position3_1_middle).sort(order);
+
+        svg3.selectAll("path").data(lindata_fet3).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1).exit().remove();
+        svg3.selectAll("path").data(lindata_fet3_early).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1_early).exit().remove();
+        svg3.selectAll("path").data(lindata_fet3_middle).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1_middle).exit().remove();
+        svg3.selectAll("path").data(lindata_fet3_late).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1_late).exit().remove();
+           
+        svg3.append("path")
+          .datum(lindata_fet3_middle)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg3.append("path")
+          .datum(lindata_hvt3_middle)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        svg3_1.append("path")
+          .datum(lindata_fet3_1_middle)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg3_1.append("path")
+          .datum(lindata_hvt3_1_middle)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        dot3.data(interpolateData(1), key).call(position3_middle).sort(order);
+        dot3_1.data(interpolateData(1), key).call(position3_1_middle).sort(order);
+        })
+        // late
+        d3.select("#update8")
+        .on("click", function(d,i) {
+            
+        svg3.selectAll("path").data(lindata_fet3).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1).exit().remove();
+        svg3.selectAll("path").data(lindata_fet3_early).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1_early).exit().remove();
+        svg3.selectAll("path").data(lindata_fet3_middle).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1_middle).exit().remove();
+        svg3.selectAll("path").data(lindata_fet3_late).exit().remove();
+        svg3_1.selectAll("path").data(lindata_fet3_1_late).exit().remove();
+           
+        svg3.append("path")
+          .datum(lindata_fet3_late)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg3.append("path")
+          .datum(lindata_hvt3_late)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        svg3_1.append("path")
+          .datum(lindata_fet3_1_late)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg3_1.append("path")
+          .datum(lindata_hvt3_1_late)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+          dot3.data(interpolateData(1), key).call(position3_late).sort(order);
+          dot3_1.data(interpolateData(1), key).call(position3_1_late).sort(order);
+
+        })
+        // Add line for correlation graphs -------------------------------
         var linedata = twoGroupData().map(function(d) {
             return d.EFCor;
           });
@@ -544,53 +893,350 @@
           .attr("class", "line2")
           .attr("d", line);
 
-        // Add regression line
+        // Add regression line---------------------------------------
         var fet_data = interpolateData(1).splice(0,25);
         var hvt_data = interpolateData(1).splice(25,50);
         
-        // svg 3 EF and game
-        var lin_fet1 = ss.linear_regression().data(fet_data.map(function(d) {
-            return [+d.total_improve, d.baselineEF];
+        // svg 3 EF and game :: all
+        var lin_fet3 = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_residual, d.baselineEF_residual];
           })).line();
 
-        var lin_hvt1 = ss.linear_regression().data(hvt_data.map(function(d) {
-            return [+d.total_improve, d.baselineEF];
+        var lin_hvt3 = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_residual, d.baselineEF_residual];
           })).line();
         
-        var lindata_fet1 = ximproveScale.domain().map(function(x) {
+        var lindata_fet3 = ximproveScale.domain().map(function(x) {
             return {
               x: x,
-              y: lin_fet1(+x)
+              y: lin_fet3(+x)
             };
           });
-        var lindata_hvt1 = ximproveScale.domain().map(function(x) {
+        var lindata_hvt3 = ximproveScale.domain().map(function(x) {
             return {
               x: x,
-              y: lin_hvt1(+x)
+              y: lin_hvt3(+x)
             };
           });
         // svg 3_1 WM and game
-        var lin_fet2 = ss.linear_regression().data(fet_data.map(function(d) {
-            return [+d.total_improve, d.baselineWM];
+        var lin_fet3_1 = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_residual, d.baselineWM_residual];
           })).line();
 
-        var lin_hvt2 = ss.linear_regression().data(hvt_data.map(function(d) {
-            return [+d.total_improve, d.baselineWM];
+        var lin_hvt3_1 = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_residual, d.baselineWM_residual];
           })).line();
         
-        var lindata_fet2 = ximproveScale.domain().map(function(x) {
+        var lindata_fet3_1 = ximproveScale.domain().map(function(x) {
             return {
               x: x,
-              y: lin_fet2(+x)
+              y: lin_fet3_1(+x)
             };
           });
-        var lindata_hvt2 = ximproveScale.domain().map(function(x) {
+        var lindata_hvt3_1 = ximproveScale.domain().map(function(x) {
             return {
               x: x,
-              y: lin_hvt2(+x)
+              y: lin_hvt3_1(+x)
+            };
+          });
+        // svg 4 WM and game
+        var lin_fet4 = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_residual, d.EFimprove_residual];
+          })).line();
+
+        var lin_hvt4 = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_residual, d.EFimprove_residual];
+          })).line();
+        
+        var lindata_fet4 = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet4(+x)
+            };
+          });
+        var lindata_hvt4 = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt4(+x)
+            };
+          });
+        // svg 4_1 WM and game
+        var lin_fet4_1 = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_residual, d.WMimprove_residual];
+          })).line();
+
+        var lin_hvt4_1 = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_residual, d.WMimprove_residual];
+          })).line();
+        
+        var lindata_fet4_1 = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet4_1(+x)
+            };
+          });
+        var lindata_hvt4_1 = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt4_1(+x)
             };
           });
 
+        // svg 3 EF and game :: early
+        var lin_fet3_early = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_early_residual, d.baselineEF_residual];
+          })).line();
+
+        var lin_hvt3_early = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_early_residual, d.baselineEF_residual];
+          })).line();
+        
+        var lindata_fet3_early = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet3_early(+x)
+            };
+          });
+        var lindata_hvt3_early = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt3_early(+x)
+            };
+          });
+        // svg 3_1 WM and game
+        var lin_fet3_1_early = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_early_residual, d.baselineWM_residual];
+          })).line();
+
+        var lin_hvt3_1_early = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_early_residual, d.baselineWM_residual];
+          })).line();
+        
+        var lindata_fet3_1_early = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet3_1_early(+x)
+            };
+          });
+        var lindata_hvt3_1_early = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt3_1_early(+x)
+            };
+          });
+        // svg 4 WM and game
+        var lin_fet4_early = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_early_residual, d.EFimprove_residual];
+          })).line();
+
+        var lin_hvt4_early = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_early_residual, d.EFimprove_residual];
+          })).line();
+        
+        var lindata_fet4_early = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet4_early(+x)
+            };
+          });
+        var lindata_hvt4_early = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt4_early(+x)
+            };
+          });
+        // svg 4_1 WM and game
+        var lin_fet4_1_early = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_early_residual, d.WMimprove_residual];
+          })).line();
+
+        var lin_hvt4_1_early = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_early_residual, d.WMimprove_residual];
+          })).line();
+        
+        var lindata_fet4_1_early = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet4_1_early(+x)
+            };
+          });
+        var lindata_hvt4_1_early = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt4_1_early(+x)
+            };
+          });
+
+        // svg 3 EF and game :: late
+        var lin_fet3_late = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_late_residual, d.baselineEF_residual];
+          })).line();
+
+        var lin_hvt3_late = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_late_residual, d.baselineEF_residual];
+          })).line();
+        
+        var lindata_fet3_late = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet3_late(+x)
+            };
+          });
+        var lindata_hvt3_late = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt3_late(+x)
+            };
+          });
+        // svg 3_1 WM and game
+        var lin_fet3_1_late = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_late_residual, d.baselineWM_residual];
+          })).line();
+
+        var lin_hvt3_1_late = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_late_residual, d.baselineWM_residual];
+          })).line();
+        
+        var lindata_fet3_1_late = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet3_1_late(+x)
+            };
+          });
+        var lindata_hvt3_1_late = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt3_1_late(+x)
+            };
+          });
+        // svg 4 WM and game
+        var lin_fet4_late = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_late_residual, d.EFimprove_residual];
+          })).line();
+
+        var lin_hvt4_late = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_late_residual, d.EFimprove_residual];
+          })).line();
+        
+        var lindata_fet4_late = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet4_late(+x)
+            };
+          });
+        var lindata_hvt4_late = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt4_late(+x)
+            };
+          });
+        // svg 4_1 WM and game
+        var lin_fet4_1_late = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_late_residual, d.WMimprove_residual];
+          })).line();
+
+        var lin_hvt4_1_late = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_late_residual, d.WMimprove_residual];
+          })).line();
+        
+        var lindata_fet4_1_late = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet4_1_late(+x)
+            };
+          });
+        var lindata_hvt4_1_late = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt4_1_late(+x)
+            };
+          });
+
+        // svg 3 EF and game :: middle
+        var lin_fet3_middle = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_middle_residual, d.baselineEF_residual];
+          })).line();
+
+        var lin_hvt3_middle = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_middle_residual, d.baselineEF_residual];
+          })).line();
+        
+        var lindata_fet3_middle = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet3_middle(+x)
+            };
+          });
+        var lindata_hvt3_middle = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt3_middle(+x)
+            };
+          });
+        // svg 3_1 WM and game
+        var lin_fet3_1_middle = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_middle_residual, d.baselineWM_residual];
+          })).line();
+
+        var lin_hvt3_1_middle = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_middle_residual, d.baselineWM_residual];
+          })).line();
+        
+        var lindata_fet3_1_middle = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet3_1_middle(+x)
+            };
+          });
+        var lindata_hvt3_1_middle = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt3_1_middle(+x)
+            };
+          });
+        // svg 4 WM and game
+        var lin_fet4_middle = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_middle_residual, d.EFimprove_residual];
+          })).line();
+
+        var lin_hvt4_middle = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_middle_residual, d.EFimprove_residual];
+          })).line();
+        
+        var lindata_fet4_middle = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet4_middle(+x)
+            };
+          });
+        var lindata_hvt4_middle = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt4_middle(+x)
+            };
+          });
+        // svg 4_1 WM and game
+        var lin_fet4_1_middle = ss.linear_regression().data(fet_data.map(function(d) {
+            return [+d.total_improve_middle_residual, d.WMimprove_residual];
+          })).line();
+
+        var lin_hvt4_1_middle = ss.linear_regression().data(hvt_data.map(function(d) {
+            return [+d.total_improve_middle_residual, d.WMimprove_residual];
+          })).line();
+        
+        var lindata_fet4_1_middle = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_fet4_1_middle(+x)
+            };
+          });
+        var lindata_hvt4_1_middle = ximproveScale.domain().map(function(x) {
+            return {
+              x: x,
+              y: lin_hvt4_1_middle(+x)
+            };
+          });
+  
         var regline = d3.svg.line()
           // assign the X function to plot our line as we wish
           .x(function(d) { 
@@ -600,21 +1246,40 @@
             return yScale(d.y); 
           })
 
+        // Initial drawing  
         svg3.append("path")
-          .datum(lindata_fet1)
+          .datum(lindata_fet3)
           .attr("class", "reg_fet")
           .attr("d", regline);
         svg3.append("path")
-          .datum(lindata_hvt1)
+          .datum(lindata_hvt3)
           .attr("class", "reg_hvt")
           .attr("d", regline);
 
         svg3_1.append("path")
-          .datum(lindata_fet2)
+          .datum(lindata_fet3_1)
           .attr("class", "reg_fet")
           .attr("d", regline);
         svg3_1.append("path")
-          .datum(lindata_hvt2)
+          .datum(lindata_hvt3_1)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        svg4.append("path")
+          .datum(lindata_fet4)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg4.append("path")
+          .datum(lindata_hvt4)
+          .attr("class", "reg_hvt")
+          .attr("d", regline);
+
+        svg4_1.append("path")
+          .datum(lindata_fet4_1)
+          .attr("class", "reg_fet")
+          .attr("d", regline);
+        svg4_1.append("path")
+          .datum(lindata_hvt4_1)
           .attr("class", "reg_hvt")
           .attr("d", regline);
 
@@ -658,7 +1323,7 @@
             .data(interpolateData(1))
           .enter().append("circle")
             .attr("class", "dot")
-            .attr("data-legend",function(d) { return color(d);})
+            .attr("data-legend",function(d) { console.log(d); return color(d);})
             .style("fill", function(d) { return colorScale(color(d)); })
             .call(position2)
             .sort(order);
@@ -739,52 +1404,6 @@
         dotC2_re.append("title")
             .text(function(d) { return d.WMCor; }); 
 
-        // Add correlation lines
-        /*/ Derive a linear regression
-        var lin = ss.linear_regression().data(interpolateData(1).map(function(d) {
-          return [+d.baselineEF, d.total_improve];
-        })).line();
-
-        console.log(lin);
-        // Create a line based on the beginning and endpoints of the range
-        var lindata = x.domain().map(function(x) {
-          return {
-            baseEF: lin(+y),
-            improve: lin(+x)
-          };
-        });
-    
-    svg3.append("path")
-      .datum(lindata)
-      .attr("class", "reg")
-      .attr("d", line);
-*/
-      // correlation line data
-      var gameSuccssAll_data = interpolateData(1).map(function(d) {
-            return d.total_improve;
-          });
-      var gameSuccssEarly_data = interpolateData(1).map(function(d) {
-            return d.total_improve_early;
-          });
-      var gameSuccssMiddle_data = interpolateData(1).map(function(d) {
-            return d.total_improve_middle;
-          });
-      var gameSuccssLate_data = interpolateData(1).map(function(d) {
-            return d.total_improve_late;
-          });
-      var baselineEF_data = interpolateData(1).map(function(d) {
-            return d.baselineEF;
-          });
-      var baselineWM_data = interpolateData(1).map(function(d) {
-            return d.baselineWM;
-          });
-      var improveEF = interpolateData(1).map(function(d) {
-            return d.EFimprove;
-          });
-      var improveWM = interpolateData(1).map(function(d) {
-            return d.WMimprove;
-          });
-
         // Add a legend
         legend = svg.append("g")
         .attr("class","legend")
@@ -851,23 +1470,13 @@
 
         // Positions the dots based on data.
         function position(dot) {
-          dot .attr("cx", function(d) { return xScale(x(d)); })
-              .attr("cy", function(d) { return yScale(y(d)); })
-              .attr("r", function(d) { return d.dotSize});
-        }
-        function position2(dot2) {
-          dot2 .attr("cx", function(d) { return xScale(x(d)); })
-              .attr("cy", function(d) { return yScale(d.baselineWM); })
-              .attr("r", function(d) { return d.dotSize});
-        }
-        function position3(dot3) {
-          dot3 .attr("cx", function(d) {return ximproveScale(d.total_improve); })
+          dot .attr("cx", function(d) { return xScale(d.gameScore); })
               .attr("cy", function(d) { return yScale(d.baselineEF); })
               .attr("r", function(d) { return d.dotSize});
         }
-        function position4(dot4) {
-          dot4 .attr("cx", function(d) { return ximproveScale(d.total_improve); })
-              .attr("cy", function(d) { return yScale(d.EFimprove); })
+        function position2(dot2) {
+          dot2 .attr("cx", function(d) { return xScale(d.gameScore); })
+              .attr("cy", function(d) { return yScale(d.baselineWM); })
               .attr("r", function(d) { return d.dotSize});
         }
         function positionC(dotC) {
@@ -880,16 +1489,87 @@
               .attr("cy", function(d) { return yCorScale(d.WMCor); })
               .attr("r", function(d) { return d.dotSize});
         }
+        function position3(dot3) {
+          dot3 .attr("cx", function(d) {return ximproveScale(d.total_improve_residual); })
+              .attr("cy", function(d) { return yScale(d.baselineEF_residual); })
+              .attr("r", function(d) { return d.dotSize});
+        }
+        function position4(dot4) {
+          dot4 .attr("cx", function(d) { return ximproveScale(d.total_improve_residual); })
+              .attr("cy", function(d) { return yScale(d.EFimprove_residual); })
+              .attr("r", function(d) { return d.dotSize});
+        }
         function position3_1(dot3_1) {
-          dot3_1 .attr("cx", function(d) {return ximproveScale(d.total_improve); })
-              .attr("cy", function(d) { return yScale(d.baselineWM); })
+          dot3_1 .attr("cx", function(d) {return ximproveScale(d.total_improve_residual); })
+              .attr("cy", function(d) { return yScale(d.baselineWM_residual); })
               .attr("r", function(d) { return d.dotSize});
         }
         function position4_1(dot4_1) {
-          dot4_1 .attr("cx", function(d) { return ximproveScale(d.total_improve); })
-              .attr("cy", function(d) { return yScale(d.WMimprove); })
+          dot4_1 .attr("cx", function(d) { return ximproveScale(d.total_improve_residual); })
+              .attr("cy", function(d) { return yScale(d.WMimprove_residual); })
               .attr("r", function(d) { return d.dotSize});
         }
+        function position3_early(dot3) {
+          dot3 .attr("cx", function(d) {return ximproveScale(d.total_improve_early_residual); })
+              .attr("cy", function(d) { return yScale(d.baselineEF_residual); })
+              .attr("r", function(d) { return d.dotSize});
+        }
+        function position4_early(dot4) {
+          dot4 .attr("cx", function(d) { return ximproveScale(d.total_improve_early_residual); })
+              .attr("cy", function(d) { return yScale(d.EFimprove_residual); })
+              .attr("r", function(d) { return d.dotSize});
+        }
+        function position3_1_early(dot3_1) {
+          dot3_1 .attr("cx", function(d) {return ximproveScale(d.total_improve_early_residual); })
+              .attr("cy", function(d) { return yScale(d.baselineWM_residual); })
+              .attr("r", function(d) { return d.dotSize});
+        }
+        function position4_1_early(dot4_1) {
+          dot4_1 .attr("cx", function(d) { return ximproveScale(d.total_improve_early_residual); })
+              .attr("cy", function(d) { return yScale(d.WMimprove_residual); })
+              .attr("r", function(d) { return d.dotSize});
+        }
+        function position3_middle(dot3) {
+          dot3 .attr("cx", function(d) {return ximproveScale(d.total_improve_middle_residual); })
+              .attr("cy", function(d) { return yScale(d.baselineEF_residual); })
+              .attr("r", function(d) { return d.dotSize});
+        }
+        function position4_middle(dot4) {
+          dot4 .attr("cx", function(d) { return ximproveScale(d.total_improve_middle_residual); })
+              .attr("cy", function(d) { return yScale(d.EFimprove_residual); })
+              .attr("r", function(d) { return d.dotSize});
+        }
+        function position3_1_middle(dot3_1) {
+          dot3_1 .attr("cx", function(d) {return ximproveScale(d.total_improve_middle_residual); })
+              .attr("cy", function(d) { return yScale(d.baselineWM_residual); })
+              .attr("r", function(d) { return d.dotSize});
+        }
+        function position4_1_middle(dot4_1) {
+          dot4_1 .attr("cx", function(d) { return ximproveScale(d.total_improve_middle_residual); })
+              .attr("cy", function(d) { return yScale(d.WMimprove_residual); })
+              .attr("r", function(d) { return d.dotSize});
+        }
+        function position3_late(dot3) {
+          dot3 .attr("cx", function(d) {return ximproveScale(d.total_improve_late_residual); })
+              .attr("cy", function(d) { return yScale(d.baselineEF_residual); })
+              .attr("r", function(d) { return d.dotSize});
+        }
+        function position4_late(dot4) {
+          dot4 .attr("cx", function(d) { return ximproveScale(d.total_improve_late_residual); })
+              .attr("cy", function(d) { return yScale(d.EFimprove_residual); })
+              .attr("r", function(d) { return d.dotSize});
+        }
+        function position3_1_late(dot3_1) {
+          dot3_1 .attr("cx", function(d) {return ximproveScale(d.total_improve_late_residual); })
+              .attr("cy", function(d) { return yScale(d.baselineWM_residual); })
+              .attr("r", function(d) { return d.dotSize});
+        }
+        function position4_1_late(dot4_1) {
+          dot4_1 .attr("cx", function(d) { return ximproveScale(d.total_improve_late_residual); })
+              .attr("cy", function(d) { return yScale(d.WMimprove_residual); })
+              .attr("r", function(d) { return d.dotSize});
+        }
+
         // Defines a sort order so that the smallest dots are drawn on top.
         function order(a, b) {
           return radius(b) - radius(a);
@@ -956,18 +1636,27 @@
               name: d.name,
               group: d.group,
               gameScore: interpolateValues(d.gameScore, year),
-              dotSize: d.dotSize,
+              gameScore_residual: interpolateValues(d.game_residual, year),
+              dotSize: 10,
               baselineEF: d.baselineEF,
               baselineWM: d.baselineWM,
+              baselineEF_residual: d.baseEF_residual,
+              baselineWM_residual: d.baseWM_residual,
               session: year,
               EFCor: interpolateValues(d.EF_correlation, year),
               WMCor: interpolateValues(d.WM_correlation, year),
               EFimprove: d.reasoning_improve,
               WMimprove: d.attMemory_improve,
+              EFimprove_residual: d.improveEF_residual,
+              WMimprove_residual: d.improveWM_residual,
               total_improve: d.total_improve,
               total_improve_early: d.total_improve_early,
               total_improve_middle: d.total_improve_middle_only,
-              total_improve_late: d.total_improve_late_only
+              total_improve_late: d.total_improve_late_only,
+              total_improve_residual: d.totalImproveAll_residual,
+              total_improve_early_residual: d.totalImproveEarly_residual,
+              total_improve_middle_residual: d.totalImproveMiddle_residual,
+              total_improve_late_residual: d.totalImproveLate_residual
             };
           });
         }
