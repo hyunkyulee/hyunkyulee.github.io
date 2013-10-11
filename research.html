@@ -145,65 +145,11 @@
         stroke: orange;
         stroke-width: 1.5px;
       }
-    
-    .myButton {
-        
-        -moz-box-shadow:inset 0px 1px 0px 0px #efdcfb;
-        -webkit-box-shadow:inset 0px 1px 0px 0px #efdcfb;
-        box-shadow:inset 0px 1px 0px 0px #efdcfb;
-        
-        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #dfbdfa), color-stop(1, #bc80ea));
-        background:-moz-linear-gradient(top, #dfbdfa 5%, #bc80ea 100%);
-        background:-webkit-linear-gradient(top, #dfbdfa 5%, #bc80ea 100%);
-        background:-o-linear-gradient(top, #dfbdfa 5%, #bc80ea 100%);
-        background:-ms-linear-gradient(top, #dfbdfa 5%, #bc80ea 100%);
-        background:linear-gradient(to bottom, #dfbdfa 5%, #bc80ea 100%);
-        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfbdfa', endColorstr='#bc80ea',GradientType=0);
-        
-        background-color:#dfbdfa;
-        
-        -moz-border-radius:6px;
-        -webkit-border-radius:6px;
-        border-radius:6px;
-        
-        border:1px solid #c584f3;
-        
-        display:inline-block;
-        color:#ffffff;
-        font-family:arial;
-        font-size:15px;
-        font-weight:bold;
-        padding:6px 24px;
-        text-decoration:none;
-        
-        text-shadow:0px 1px 0px #9752cc;
-        
-    }
-    .myButton:hover {
-        
-        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #bc80ea), color-stop(1, #dfbdfa));
-        background:-moz-linear-gradient(top, #bc80ea 5%, #dfbdfa 100%);
-        background:-webkit-linear-gradient(top, #bc80ea 5%, #dfbdfa 100%);
-        background:-o-linear-gradient(top, #bc80ea 5%, #dfbdfa 100%);
-        background:-ms-linear-gradient(top, #bc80ea 5%, #dfbdfa 100%);
-        background:linear-gradient(to bottom, #bc80ea 5%, #dfbdfa 100%);
-        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#bc80ea', endColorstr='#dfbdfa',GradientType=0);
-        
-        background-color:#bc80ea;
-    }
-    .myButton:active {
-        position:relative;
-        top:1px;
-    }
-
-    }
-
-
-
+  
       </style>
       <h2>Relation between baseline ability and game performance</h2>
       <aside style="color:#848484;font-size:23px;">Partial correlation between baseline cognitive abilities and game performance while controlling gender</aside>
-      <aside style="color:#848484;font-size:18px;">Mouseover the session to move forward and backwards through training.</aside>
+      <aside style="color:#848484;font-size:16px;">Mouseover the session to move forward and backwards through training.</aside>
       <div class='chart'id="wrap">
           <div id="left_col">
               <p id="chart"></p>
@@ -222,12 +168,13 @@
       </div>
     <h2>Relation between baseline ability and training success</h2>
       <aside style="color:#848484;font-size:23px;">Partial correlation between baseline cognitive abilities and game improvement while controlling gender and baseline game performance</aside>
-      <aside style="color:#848484;font-size:18px;padding-top:10px;">Toggle the training phase by clicking on the button.</aside>
-      <div style="padding-top:6px;"> 
-        <button class ="myButton" id = "update5">ALL</button>
-        <button class ="myButton" id = "update6">Early</button>
-        <button class ="myButton" id = "update7">Middle</button>
-        <button class ="myButton" id = "update8">Late</button>
+      <aside style="color:#848484;font-size:16px;padding-top:10px;">Toggle the training phase by clicking on the button.</aside>
+      
+      <div style="padding-top:6px;" class="btn-group">
+          <button type="button" class="btn btn-default" id = "update1">ALL</button>
+          <button type="button" class="btn btn-default" id = "update2">Early</button>
+          <button type="button" class="btn btn-default" id = "update3">Middle</button>
+          <button type="button" class="btn btn-default" id = "update4">Late</button>
       </div>
      
      <div id="wrap2">
@@ -241,12 +188,12 @@
      
       <h2>Relation between game success and transfer success</h2>
       <aside style="color:#848484;font-size:23px;">Partial correlation between transfer of cognitive function and game improvement while controlling gender and baseline game performance</aside>
-      <aside style="color:#848484;font-size:18px;padding-top:10px;">Toggle training phase by clicking on the button.</aside>
-      <div style="padding-top:6px;">
-        <button class ="myButton" id = "update1">ALL</button>
-        <button class ="myButton" id = "update2">Early</button>
-        <button class ="myButton" id = "update3">Middle</button>
-        <button class ="myButton" id = "update4">Late</button>
+      <aside style="color:#848484;font-size:16px;padding-top:10px;">Toggle training phase by clicking on the button.</aside>
+      <div style="padding-top:6px;" class="btn-group">
+          <button type="button" class="btn btn-default" id = "update5">ALL</button>
+          <button type="button" class="btn btn-default" id = "update6">Early</button>
+          <button type="button" class="btn btn-default" id = "update7">Middle</button>
+          <button type="button" class="btn btn-default" id = "update8">Late</button>
       </div>
       <div id="wrap2">
           <div id="left_col2">
@@ -259,7 +206,7 @@
 
       <script src="http://d3js.org/d3.v2.js"></script>
       <script src="https://raw.github.com/tmcw/simple-statistics/master/src/simple_statistics.js"></script>
-      <script src="d3.legend.js"></script>
+      <script src="js/d3.legend.js"></script>
       <script>
 
       // Various accessors that specify the four dimensions of data to visualize.
@@ -570,7 +517,7 @@
 
         // Add button functions
         // All 
-        d3.select("#update1")
+        d3.select("#update5")
         .on("click", function(d,i) {
 
         svg4.selectAll("path").data(lindata_fet4).exit().remove();
@@ -604,7 +551,7 @@
           dot4_1.data(interpolateData(1), key).call(position4_1).sort(order);
         }) 
         // early
-        d3.select("#update2")
+        d3.select("#update6")
         .on("click", function(d,i) {
 
         svg4.selectAll("path").data(lindata_fet4).exit().remove();
@@ -638,7 +585,7 @@
         dot4_1.data(interpolateData(1), key).call(position4_1_early).sort(order);
         })
         // middle
-        d3.select("#update3")
+        d3.select("#update7")
         .on("click", function(d,i) {
             
         svg4.selectAll("path").data(lindata_fet4).exit().remove();
@@ -673,7 +620,7 @@
 
         })
         // late
-        d3.select("#update4")
+        d3.select("#update8")
         .on("click", function(d,i) {
             dot4.data(interpolateData(1), key).call(position4_late).sort(order);
             dot4_1.data(interpolateData(1), key).call(position4_1_late).sort(order);
@@ -706,7 +653,7 @@
           .attr("d", regline);
         })
       // All 
-        d3.select("#update5")
+        d3.select("#update1")
         .on("click", function(d,i) {
 
         svg3.selectAll("path").data(lindata_fet3).exit().remove();
@@ -740,7 +687,7 @@
         dot3_1.data(interpolateData(1), key).call(position3_1).sort(order);
         }) 
         // early
-        d3.select("#update6")
+        d3.select("#update2")
         .on("click", function(d,i) {
             
         svg3.selectAll("path").data(lindata_fet3).exit().remove();
@@ -775,7 +722,7 @@
 
         })
         // middle
-        d3.select("#update7")
+        d3.select("#update3")
         .on("click", function(d,i) {
             dot3.data(interpolateData(1), key).call(position3_middle).sort(order);
             dot3_1.data(interpolateData(1), key).call(position3_1_middle).sort(order);
@@ -811,7 +758,7 @@
         dot3_1.data(interpolateData(1), key).call(position3_1_middle).sort(order);
         })
         // late
-        d3.select("#update8")
+        d3.select("#update4")
         .on("click", function(d,i) {
             
         svg3.selectAll("path").data(lindata_fet3).exit().remove();
