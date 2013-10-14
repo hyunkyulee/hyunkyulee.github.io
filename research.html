@@ -35,9 +35,9 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Research <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li class="divider"></li>
-                <li class="dropdown-header">In Preparation</li>
-                <li><a href="research.html">SF Predictor</a></li>
-                <li><a href="lifestyle.html">LifeStyle</a></li>
+                <li class="dropdown-header">In Preparation: Frontiers</li>
+                <li><a href="research.html">SF Predictor Figures</a></li>
+                <li><a href="lifestyle.html">SF Predictor Tables</a></li>
               </ul>
             </li>
             <li><a href="misc.html">Misc</a></li>
@@ -127,29 +127,41 @@
       }
       .line {
         fill: none;
-        stroke: steelblue;
+        stroke: #2ca02c;
         stroke-width: 1.5px;
       }
       .line2 {
         fill: none;
-        stroke: orange;
+        stroke: #d62728;
+        stroke-width: 1.5px;
+      }
+      .line-1 {
+              fill: none;
+              stroke: #1f77b4;
+              stroke-width: 1.5px;
+      }
+      .line-2 {
+        fill: none;
+        stroke: #ff7f0e;
         stroke-width: 1.5px;
       }
       .reg_fet {
         fill: none;
-        stroke: steelblue;
+        stroke: #2ca02c;
         stroke-width: 1.5px;
       }
       .reg_hvt {
         fill: none;
-        stroke: orange;
+        stroke: #d62728;
         stroke-width: 1.5px;
       }
   
       </style>
-      <h2>Relation between baseline ability and game performance</h2>
+      
+      <h2>Relation between baseline ability and game performance by trainign regimen</h2>
       <aside style="color:#848484;font-size:23px;">Partial correlation between baseline cognitive abilities and game performance while controlling gender</aside>
       <aside style="color:#848484;font-size:16px;">Mouseover the session to move forward and backwards through training.</aside>
+
       <div class='chart'id="wrap">
           <div id="left_col">
               <p id="chart"></p>
@@ -166,6 +178,11 @@
               <p id="chartCor2"></p>
           </div>
       </div>
+
+    <h2>Relation between baseline ability and game performance</h2> 
+      <aside style="color:#848484;font-size:23px;">Partial correlation between baseline cognitive abilities and game performance while controlling gender</aside> 
+      <p id="chart-general"></p>
+      
     <h2>Relation between baseline ability and training success</h2>
       <aside style="color:#848484;font-size:23px;">Partial correlation between baseline cognitive abilities and game improvement while controlling gender and baseline game performance</aside>
       <aside style="color:#848484;font-size:16px;padding-top:10px;">Toggle the training phase by clicking on the button.</aside>
@@ -207,6 +224,7 @@
       <script src="http://d3js.org/d3.v2.js"></script>
       <script src="https://raw.github.com/tmcw/simple-statistics/master/src/simple_statistics.js"></script>
       <script src="js/d3.legend.js"></script>
+      
       <script>
 
       // Various accessors that specify the four dimensions of data to visualize.
@@ -508,7 +526,120 @@
           .attr("y", height - 24)
           .attr("x", width)
           .text(1);
+// first graph
 
+
+      // Create the SVG container and set the origin.
+      var svg_general = d3.select("#chart-general").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      // Add the x-axis.
+      svg_general.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xCorAxis);
+      svg_general.append("g")
+          .attr("class", "y axis")
+          .call(yCorAxis);
+      svg_general.append("text")
+          .attr("class", "x label")
+          .attr("text-anchor", "middle")
+          .attr("x", widthCor/2)
+          .attr("y", height + 50)
+          .text("Training Session");
+      svg_general.append("text")
+          .attr("class", "y label")
+          .attr("text-anchor", "end")
+          .attr("y", -50)
+          .attr("dy", ".75em")
+          .attr("transform", "rotate(-90)")
+          .text("Correlation game score and baseline abilities (r)");
+
+      var dataset = [
+                  [1, 0.432, "working memory"],
+                  [2, 0.396, "working memory"],
+                  [3, 0.492, "working memory"],
+                  [4, 0.346, "working memory"],
+                  [5, 0.333, "working memory"],
+                  [6, 0.397, "working memory"],
+                  [7, 0.416, "working memory"],
+                  [8, 0.297, "working memory"],
+                  [9, 0.325, "working memory"],
+                  [10, 0.359, "working memory"],
+                  [11, 0.334, "working memory"],
+                  [12, 0.234, "working memory"],
+                  [13, 0.312, "working memory"],
+                  [14, 0.265, "working memory"],
+                  [15, 0.32, "working memory"],
+                  [1,0.571, "executive function"],
+                  [2,0.567, "executive function"],
+                  [3,0.602, "executive function"],
+                  [4,0.541, "executive function"],
+                  [5,0.533, "executive function"],
+                  [6,0.498, "executive function"],
+                  [7,0.454, "executive function"],
+                  [8,0.401, "executive function"],
+                  [9,0.303, "executive function"],
+                  [10,0.307, "executive function"],
+                  [11,0.347, "executive function"],
+                  [12,0.357, "executive function"],
+                  [13,0.339, "executive function"],
+                  [14,0.329, "executive function"],
+                  [15,0.344, "executive function"]
+                  ]
+
+    var line = d3.svg.line()
+      // assign the X function to plot our line as we wish
+      .x(function(d) { 
+        return xCorScale(d[0]); 
+      })
+      .y(function(d) { 
+        return yCorScale(d[1]); 
+      })
+
+    var wm = dataset.slice(0,15);
+    var ef = dataset.slice(15);
+
+    console.log (wm);
+    console.log (ef); 
+
+    svg_general.append("path")
+          .datum(wm)
+          .attr("class", "line-1")
+          .attr("data-legend",function(d) {return d[0][2];})
+          .attr("d", line)
+
+    svg_general.append("path")
+          .datum(ef)
+          .attr("class", "line-2")
+          .attr("data-legend",function(d) {return d[0][2];})
+          .attr("d", line)
+
+    svg_general.selectAll("circle")
+           .data(dataset)
+           .enter()
+           .append("circle")
+            .style("fill", "white")
+            .style("stroke", function(d) {return colorScale(d[2]);} )
+            .attr("cx", function(d) {
+              return xCorScale(d[0]);
+           })
+           .attr("cy", function(d) {
+              return yCorScale(d[1]);
+           })
+           .attr("r", 10);
+
+
+    legend = svg_general.append("g")
+        .attr("class","legend")
+        .attr("transform","translate(50,30)")
+        .call(d3.legend)
+
+
+
+//////////////////////////////////////////////////////////////////////////////
       // Load the data.
       d3.json("sfdata.json", function(sfresults) {
 
@@ -1560,7 +1691,7 @@
         }
 
         // Tweens the entire chart by first tweening the year, and then the data.
-        // For the interpolated data, the dots and label are redrawn.
+        // For the interpolated data, the dots and label are #d62728rawn.
         function tweenYear() {
           var year = d3.interpolateNumber(1, 15);
           return function(t) { displayYear(year(t)); };
